@@ -1,2 +1,9 @@
 transformers
 torch
+torchaudio
+peft
+tiktoken
+accelerate>=0.26.0
+soundfile
+deepspeed
+mpi4py

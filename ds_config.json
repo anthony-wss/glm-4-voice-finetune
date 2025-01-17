@@ -1,0 +1,13 @@
+{
+    "zero_optimization": {
+        "stage": 3
+    },
+    "train_micro_batch_size_per_gpu": "auto",
+    "bf16": {
+        "enabled": true
+    },
+    "amp": {
+        "enabled": "auto",
+        "opt_level": "O1"
+    }
+}

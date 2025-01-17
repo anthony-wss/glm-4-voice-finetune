@@ -39,28 +39,26 @@ def main():
 
 
     glm_model = prepare_model_for_lora(glm_model)
+    trainable_params = sum(p.numel() for p in glm_model.parameters() if p.requires_grad)
+    all_params = sum(p.numel() for p in glm_model.parameters())
+    print(f"Trainable parameters: {trainable_params} / {all_params}")
+    
+    from deepspeed.runtime.zero.stage3 import estimate_zero3_model_states_mem_needs_all_live
+    print(estimate_zero3_model_states_mem_needs_all_live(glm_model, num_gpus_per_node=8, num_nodes=1))
+    # exit()
 
     training_args = TrainingArguments(
         output_dir="./results",
         num_train_epochs=3,
-        per_device_train_batch_size=1,  # Reduced batch size
-        per_device_eval_batch_size=1,
-        gradient_accumulation_steps=16,  # Increased for effective batch size
-        warmup_steps=100,
-        weight_decay=0.01,
-        logging_dir='./logs',
-        logging_steps=10,
-        save_steps=200,
-        eval_steps=200,
-        evaluation_strategy="no",
-        save_total_limit=2,
-        learning_rate=2e-4,
-        fp16=True,  # Use fp16 training
+        per_device_train_batch_size=1,
         gradient_checkpointing=True,
-        # Memory optimizations
-        optim="paged_adamw_8bit",
-        max_grad_norm=0.3,
+        bf16=True,
+        report_to="wandb",
+        logging_steps=1,
+        logging_strategy="steps",
+        deepspeed="ds_config.json"
     )
+    training_args = training_args.set_dataloader(train_batch_size=1)
 
     trainer = Trainer(
         model=glm_model,

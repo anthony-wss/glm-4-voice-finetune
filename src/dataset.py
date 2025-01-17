@@ -8,6 +8,7 @@ class TextDataset(Dataset):
             texts,
             truncation=True,
             padding='max_length',
+            padding_side='right',
             max_length=max_length,
             return_tensors='pt'
         )

@@ -9,7 +9,6 @@ class FineTunedGLM4Voice:
             model_path,
             trust_remote_code=True,
             quantization_config=None,
-            torch_dtype=torch.bfloat16,
             device_map="cpu"
         )
 

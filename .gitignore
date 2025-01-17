@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+dev.ipynb
+wandb/
+results/
 
 # C extensions
 *.so
