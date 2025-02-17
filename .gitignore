@@ -5,6 +5,7 @@ __pycache__/
 dev.ipynb
 wandb/
 results/
+*.out
 
 # C extensions
 *.so

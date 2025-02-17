@@ -1,13 +1,15 @@
 {
     "zero_optimization": {
-        "stage": 3
+        "stage": 3,
+            "offload_optimizer": {
+                "device": "cpu",
+                "pin_memory": true
+            }
     },
-    "train_micro_batch_size_per_gpu": "auto",
+    "gradient_accumulation_steps": 1,
+    "train_micro_batch_size_per_gpu": 1,
+    "gradient_clipping": 1.0,
     "bf16": {
         "enabled": true
-    },
-    "amp": {
-        "enabled": "auto",
-        "opt_level": "O1"
     }
 }
