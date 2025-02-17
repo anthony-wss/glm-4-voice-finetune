@@ -2,11 +2,6 @@
 
 This project implements fine-tuning of the GLM-4-Voice model.
 
-## TODOs
-
-- [ ] feat: add liger kernel
-- [ ] feat: add deepspeed
-
 ## Install
 
 ```bash
@@ -17,4 +12,10 @@ pip install -r requirements.txt
 
 ```bash
 python train.py
+```
+
+## Train with multi-nodes on TWCC
+
+```bash
+sbatch train-multinodes.sbatch
 ```
