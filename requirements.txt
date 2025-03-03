@@ -1,5 +1,5 @@
-transformers
-torch
+transformers==4.44.1
+torch==2.3.0
 torchaudio
 peft
 tiktoken
