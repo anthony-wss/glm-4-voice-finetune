@@ -6,6 +6,7 @@ dev.ipynb
 wandb/
 results/
 *.out
+glm-4-voice-decoder/
 
 # C extensions
 *.so
