@@ -2,20 +2,17 @@ import torch
 from transformers import AutoModel, AutoTokenizer
 from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
 
+def FineTunedGLM4Voice(model_path: str):
+    model = AutoModel.from_pretrained(
+        model_path,
+        trust_remote_code=True,
+        quantization_config=None,
+        device_map="auto"
+    )
+    return model
 
-class FineTunedGLM4Voice:
-    def __init__(self, model_path: str):
-        self.model = AutoModel.from_pretrained(
-            model_path,
-            trust_remote_code=True,
-            quantization_config=None,
-            device_map="cpu"
-        )
-
-class GLM4VoiceTokenizer:
-    def __init__(self, model_path: str):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-
+def GLM4VoiceTokenizer(model_path: str):
+    return AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
 def prepare_model_for_lora(model):
     # Configure LoRA specifically for ChatGLM architecture
