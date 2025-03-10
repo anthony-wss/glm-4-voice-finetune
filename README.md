@@ -25,6 +25,12 @@ python train.py
 sbatch train-multinodes.sbatch
 ```
 
+## Training Dataset
+
+The training dataset is [here](https://huggingface.co/datasets/anthony-wss/rpg-overlap-30-35-processed).
+
+If you want to check the preprocessing steps, please refer to [preprocessing/README.md](preprocessing/README.md).
+
 ## Inference
 
 GLM-4-Voice supports streaming inference. However, currently `inference.py` only supports offline generation and is designed for model evaluation. For realtime demo, please refer to [gradio-demo](https://github.com/THUDM/GLM-4-Voice?tab=readme-ov-file#launch-web-demo)
