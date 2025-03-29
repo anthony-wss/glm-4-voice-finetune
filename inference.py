@@ -5,6 +5,8 @@ from argparse import ArgumentParser
 from src.vocoder import GLM4CodecEncoder, GLM4CodecDecoder
 import torch
 import soundfile as sf
+from peft import AutoPeftModelForCausalLM
+
 def main(input_audio: str, output_audio: str):
     # Load all the models
     glm_model = AutoModel.from_pretrained(
@@ -13,6 +15,14 @@ def main(input_audio: str, output_audio: str):
         quantization_config=None,
         device_map={"": 0}
     )
+
+    # For peft model
+    # glm_model = AutoPeftModelForCausalLM.from_pretrained(
+    #     "output/checkpoint-1000",
+    #     device_map="cuda",
+    #     trust_remote_code=True
+    # )
+
     glm_tokenizer = AutoTokenizer.from_pretrained("THUDM/glm-4-voice-9b", trust_remote_code=True)
     glm_speech_encoder = GLM4CodecEncoder()
     glm_speech_decoder = GLM4CodecDecoder("./glm-4-voice-decoder")
