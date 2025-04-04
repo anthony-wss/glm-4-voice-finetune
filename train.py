@@ -6,47 +6,50 @@ from trl import SFTConfig, SFTTrainer
 from peft import LoraConfig
 from transformers import AutoModel, AutoTokenizer
 from argparse import ArgumentParser
+import json
+import wandb
+import yaml
 
-parser = ArgumentParser()
-parser.add_arg("--lora_r", type=int, help="The lora rank")
-args = parser.parse()
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
-run_name = f"glm-lora_r{args.lora_r}-{datetime.datetime.now().strftime('%Y%m%d-%H%M%S')}"
-output_dir = "./experiments/lora_r{args.lora_r}/{run_name}"
+run_name = f"glm-lora-ft-{datetime.datetime.now().strftime('%Y%m%d-%H%M%S')}"
+output_dir = f"./experiments/{run_name}"
+os.makedirs(output_dir, exist_ok=True)
 
-wandb.init(project="glm-voice-finetune", name=run_name, config=vars(args))
+wandb.init(project="glm-voice-finetune", name=run_name, config=config)
 
-with open(os.path.join(output_dir, "config.json"), "w") as f:
-    json.dump(vars(args), f, indent=2)
+with open(os.path.join(output_dir, "config.yaml"), "w") as f:
+    yaml.dump(config, f)
 
-MAX_LENGTH = 1024
+MAX_LENGTH = config["max_length"]
 
 train_dataset = load_dataset("anthony-wss/rpg-overlap-30-35-processed", split="train")
 eval_dataset = load_dataset("anthony-wss/rpg-overlap-30-35-processed", split="test")
 print("Dataset loaded")
 
 peft_config = LoraConfig(
-    r=32,
-    lora_alpha=32,
-    target_modules=["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],
-    lora_dropout=0.1,
+    r=config["lora_r"],
+    lora_alpha=config["lora_alpha"],
+    target_modules=config["lora_trainable"],
+    lora_dropout=config["lora_dropout"],
     bias="none",
     task_type="CAUSAL_LM"
 )
 
 sft_config = SFTConfig(
-    output_dir="output",
+    output_dir=output_dir,
     max_seq_length=MAX_LENGTH,
-    learning_rate=1e-4,
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
-    per_device_eval_batch_size=4,
-    warmup_steps=50,
+    learning_rate=config["learning_rate"],
+    per_device_train_batch_size=config["train_bsz"],
+    gradient_accumulation_steps=config["gradient_accumulation_steps"],
+    per_device_eval_batch_size=config["eval_bsz"],
+    warmup_steps=config["warmup_steps"],
     logging_strategy="steps",
-    logging_steps=1,
+    logging_steps=config["logging_steps"],
     save_strategy="steps",
-    save_steps=100,
-    num_train_epochs=3,
+    save_steps=config["save_steps"],
+    num_train_epochs=config["num_epochs"],
     bf16=True,
     gradient_checkpointing=False,
     deepspeed="ds_config.json",

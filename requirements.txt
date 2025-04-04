@@ -11,3 +11,4 @@ hyperpyyaml
 omegaconf
 matcha-tts
 trl==0.10.1
+wandb

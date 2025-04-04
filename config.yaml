@@ -1,0 +1,15 @@
+lora_r: 32
+lora_alpha: 32
+lora_dropout: 0.1
+lora_trainable: ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"]
+max_length: 2048
+train_bsz: 4
+eval_bsz: 4
+gradient_accumulation_steps: 4
+learning_rate: 0.0001
+weight_decay: 0.01
+num_epochs: 3
+num_workers: 8
+warmup_steps: 50
+logging_steps: 1
+save_steps: 100
