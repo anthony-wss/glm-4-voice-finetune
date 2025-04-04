@@ -17,7 +17,7 @@ def GLM4VoiceTokenizer(model_path: str):
 def prepare_model_for_lora(model):
     # Configure LoRA specifically for ChatGLM architecture
     lora_config = LoraConfig(
-        r=16,
+        r=8,
         lora_alpha=32,
         target_modules=[
             "query_key_value",  # Attention projection
@@ -30,6 +30,9 @@ def prepare_model_for_lora(model):
         inference_mode=False,
         task_type=TaskType.CAUSAL_LM
     )
+    # Create LoRA model on CPU
+    device = model.device
+    model = model.to("cpu")
 
     # Prepare model for k-bit training if needed
     model = prepare_model_for_kbit_training(model)
@@ -39,5 +42,6 @@ def prepare_model_for_lora(model):
     
     # Print trainable parameters
     model.print_trainable_parameters()
+    model = model.to(device)
     
     return model
