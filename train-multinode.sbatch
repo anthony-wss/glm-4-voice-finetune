@@ -7,7 +7,7 @@
 #SBATCH --gpus-per-node 8
 #SBATCH --time 96:00:00              # maximum execution time (HH:MM:SS)
 #SBATCH --output=%x-%j.out           # output file name
-#SBATCH --account ENT214007
+#SBATCH --account MST112195
 #SBATCH --partition=gp4d
 
 export GPUS_PER_NODE=8
